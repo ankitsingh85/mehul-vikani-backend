@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard · Dr. Mehul Vikani Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/vendor/quill/quill.snow.css" />
+  <link rel="stylesheet" href="/admin/assets/admin.css" />
+</head>
+<body>
+  <div class="boot" id="boot"><span class="spinner spinner-lg"></span></div>
+
+  <div class="layout" id="layout" hidden>
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-head">
+        <a class="logo logo-light" href="#dashboard">
+          <svg class="logo-mark" viewBox="0 0 240 140" aria-hidden="true">
+            <rect x="2" y="22" width="6" height="6" fill="#4caa74" /><rect x="14" y="30" width="7" height="7" fill="#4caa74" /><rect x="4" y="40" width="6" height="6" fill="#4caa74" opacity=".8" /><rect x="24" y="40" width="9" height="9" fill="#4caa74" /><rect x="14" y="50" width="8" height="8" fill="#4caa74" /><rect x="28" y="56" width="9" height="9" fill="#4caa74" />
+            <path d="M40 18 H64 L110 64 L156 18 H185 V128 H165 V46 L110 101 L60 51 V98 H40 Z" fill="#fff" />
+            <path d="M62 66 L108 116 L228 4" fill="none" stroke="#4caa74" stroke-width="22" />
+          </svg>
+          <div class="logo-text"><div class="logo-name">DR. MEHUL VIKANI</div><div class="logo-sub">ADMIN PANEL</div></div>
+        </a>
+      </div>
+      <nav class="nav" id="nav"></nav>
+      <div class="sidebar-foot">
+        <div class="user-card" id="user-card"></div>
+        <button class="nav-link logout-link" id="logout-btn"></button>
+      </div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menu-btn" aria-label="Toggle menu"></button>
+        <div class="crumbs" id="crumbs"></div>
+        <div class="topbar-right">
+          <a class="btn btn-soft btn-sm view-site" href="/" target="_blank" rel="noopener" id="view-site"></a>
+          <div class="profile" id="profile">
+            <button class="profile-btn" id="profile-btn" aria-haspopup="true"></button>
+            <div class="profile-menu" id="profile-menu" hidden></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="page">
+        <div class="page-head">
+          <div>
+            <h1 id="page-title"></h1>
+            <p class="page-desc" id="page-desc"></p>
+          </div>
+          <div class="page-actions" id="page-actions"></div>
+        </div>
+        <div id="content"></div>
+      </section>
+    </div>
+  </div>
+
+  <!-- centered pop-up for forms & details -->
+  <div class="drawer" id="drawer" hidden>
+    <div class="drawer-backdrop" id="drawer-backdrop"></div>
+    <section class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+      <header class="drawer-head">
+        <div class="drawer-icon" id="drawer-icon"></div>
+        <div class="drawer-titles">
+          <h2 id="drawer-title">Details</h2>
+          <p class="muted small" id="drawer-sub"></p>
+        </div>
+        <button class="icon-btn drawer-x" data-close aria-label="Close">✕</button>
+      </header>
+      <div class="drawer-body" id="drawer-body"></div>
+    </section>
+  </div>
+
+  <!-- confirm dialog -->
+  <div class="dialog" id="dialog" hidden>
+    <div class="dialog-backdrop"></div>
+    <div class="dialog-card" role="alertdialog" aria-modal="true">
+      <div class="dialog-icon" id="dialog-icon"></div>
+      <h3 id="dialog-title"></h3>
+      <p class="muted" id="dialog-text"></p>
+      <div class="dialog-actions">
+        <button class="btn btn-ghost" id="dialog-cancel">Cancel</button>
+        <button class="btn btn-danger-solid" id="dialog-ok">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts"></div>
+
+  <script src="/admin/vendor/quill/quill.js"></script>
+  <script src="/admin/assets/api.js"></script>
+  <script src="/admin/assets/app.js"></script>
+</body>
+</html>

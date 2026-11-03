@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login · Dr. Mehul Vikani</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/admin/assets/admin.css" />
+</head>
+<body class="login-body">
+  <main class="login">
+    <aside class="login-aside">
+      <div class="pixel-grid"></div>
+      <div class="login-aside-inner">
+        <div class="logo logo-light">
+          <svg class="logo-mark" viewBox="0 0 240 140" aria-hidden="true">
+            <rect x="2" y="22" width="6" height="6" fill="#4caa74" /><rect x="14" y="30" width="7" height="7" fill="#4caa74" /><rect x="4" y="40" width="6" height="6" fill="#4caa74" opacity=".8" /><rect x="24" y="40" width="9" height="9" fill="#4caa74" /><rect x="14" y="50" width="8" height="8" fill="#4caa74" /><rect x="28" y="56" width="9" height="9" fill="#4caa74" />
+            <path d="M40 18 H64 L110 64 L156 18 H185 V128 H165 V46 L110 101 L60 51 V98 H40 Z" fill="#fff" />
+            <path d="M62 66 L108 116 L228 4" fill="none" stroke="#4caa74" stroke-width="22" />
+          </svg>
+          <div><div class="logo-name">DR. MEHUL VIKANI</div><div class="logo-sub">BARIATRIC SURGEON</div></div>
+        </div>
+        <div class="login-pitch">
+          <span class="eyebrow-light">Admin Panel</span>
+          <h2>Manage your practice's website in one place.</h2>
+          <ul class="login-points">
+            <li><span class="tick">✓</span>Track and follow up on appointment requests</li>
+            <li><span class="tick">✓</span>Publish treatments, blogs, FAQs and success stories</li>
+            <li><span class="tick">✓</span>Keep clinic contact details and stats up to date</li>
+          </ul>
+        </div>
+        <p class="login-foot">© Dr. Mehul Vikani · Advanced Bariatric &amp; Laparoscopic Centre</p>
+      </div>
+    </aside>
+
+    <section class="login-main">
+      <div class="login-card">
+        <div class="logo login-logo-mobile">
+          <svg class="logo-mark" viewBox="0 0 240 140" aria-hidden="true">
+            <rect x="2" y="22" width="6" height="6" fill="#2b8c57" /><rect x="14" y="30" width="7" height="7" fill="#2b8c57" /><rect x="24" y="40" width="9" height="9" fill="#2b8c57" /><rect x="14" y="50" width="8" height="8" fill="#2b8c57" /><rect x="28" y="56" width="9" height="9" fill="#2b8c57" />
+            <path d="M40 18 H64 L110 64 L156 18 H185 V128 H165 V46 L110 101 L60 51 V98 H40 Z" fill="#114b2c" />
+            <path d="M62 66 L108 116 L228 4" fill="none" stroke="#2b8c57" stroke-width="22" />
+          </svg>
+          <div><div class="logo-name">DR. MEHUL VIKANI</div><div class="logo-sub">BARIATRIC SURGEON</div></div>
+        </div>
+
+        <h1>Welcome back</h1>
+        <p class="muted">Sign in to continue to your dashboard.</p>
+
+        <div class="notice notice-ok" id="login-notice" hidden></div>
+
+        <form id="login-form" novalidate>
+          <label class="field">
+            <span class="field-label">Email address</span>
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="m22 7-10 6L2 7" /></svg>
+              <input type="email" name="email" autocomplete="username" placeholder="you@example.com" required autofocus />
+            </span>
+          </label>
+          <label class="field">
+            <span class="field-label">Password</span>
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+              <input type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required />
+              <button type="button" class="pw-toggle" id="pw-toggle">Show</button>
+            </span>
+          </label>
+          <div class="notice notice-err" id="login-error" hidden></div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block" id="login-btn">Sign in</button>
+        </form>
+        <a class="back-link" href="/">← Back to website</a>
+      </div>
+    </section>
+  </main>
+  <script src="/admin/assets/api.js"></script>
+  <script src="/admin/assets/login.js"></script>
+</body>
+</html>
