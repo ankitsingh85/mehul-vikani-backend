@@ -430,15 +430,16 @@
     $("#page-actions").innerHTML = actions;
   };
   const pill = (text, cls) => `<span class="pill ${cls}"><i></i>${esc(text)}</span>`;
-  const publishedPill = (v) => pill(v ? "Published" : "Draft", v ? "pill-green" : "pill-gray");
 
   /* ================= content resources ================= */
   const RESOURCES = {
     treatments: {
       label: "Treatments",
       singular: "treatment",
-      desc: "Procedures shown on the Treatments pages of the website.",
+      desc: "Procedures shown on the Treatments pages of the website. Disable a treatment to hide it from the website.",
       icon: "stethoscope",
+      fixed: true, // edit and enable/disable only, no add/delete
+      states: ["Enabled", "Disabled"],
       thumb: "image",
       primary: "title",
       secondary: (d) => truncate(d.short, 70),
@@ -468,7 +469,7 @@
         { name: "candidates", label: "Ideal candidates", type: "lines" },
         { name: "steps", label: "Treatment steps", type: "steps" },
         { section: "Visibility" },
-        { name: "isPublished", label: "Published", hint: "Show this treatment on the website", type: "toggle", default: true },
+        { name: "isPublished", label: "Enabled", hint: "Show this treatment on the website", type: "toggle", default: true },
       ],
     },
     blogs: {
@@ -557,7 +558,9 @@
 
   async function renderResource(key) {
     const r = RESOURCES[key];
-    setHead(r.label, r.desc, `<button class="btn btn-primary" id="add-btn">${icon("plus", 16)} Add ${esc(r.singular)}</button>`);
+    const [onLabel, offLabel] = r.states || ["Published", "Draft"];
+    const statusPill = (v) => pill(v ? onLabel : offLabel, v ? "pill-green" : "pill-gray");
+    setHead(r.label, r.desc, r.fixed ? "" : `<button class="btn btn-primary" id="add-btn">${icon("plus", 16)} Add ${esc(r.singular)}</button>`);
     content.innerHTML = `
       <div class="card table-card">
         <div class="toolbar">
@@ -565,7 +568,7 @@
           <div class="toolbar-filters">
             ${r.filter ? `<div class="select-wrap select-sm"><select id="cat-filter"><option value="">${esc(r.filter.label)}</option>${r.filter.options.map((o) => `<option>${esc(o)}</option>`).join("")}</select>${icon("chevron", 14)}</div>` : ""}
             <div class="segmented" id="pub-filter">
-              <button data-v="" class="active">All</button><button data-v="true">Published</button><button data-v="false">Drafts</button>
+              <button data-v="" class="active">All</button><button data-v="true">${esc(onLabel)}</button><button data-v="false">${esc(r.states ? offLabel : "Drafts")}</button>
             </div>
           </div>
         </div>
@@ -584,7 +587,7 @@
       ({ data } = await api(`/admin/${key}?${params}`));
       const area = $("#table-area");
       if (!data.length) {
-        area.innerHTML = emptyState(r.icon, `No ${r.label.toLowerCase()} found`, q || cat || pub ? "Try a different search or filter." : `Add your first ${r.singular} to show it on the website.`);
+        area.innerHTML = emptyState(r.icon, `No ${r.label.toLowerCase()} found`, q || cat || pub || r.fixed ? "Try a different search or filter." : `Add your first ${r.singular} to show it on the website.`);
         return;
       }
       area.innerHTML = `<div class="table-scroll"><table class="table">
@@ -597,10 +600,11 @@
               <div class="cell-text"><div class="cell-title">${esc(d[r.primary])}</div><div class="cell-sub">${esc(r.secondary(d))}</div></div>
             </div></td>
             ${r.columns.map((c) => `<td data-label="${esc(c.label)}" class="${c.wide ? "td-wide" : ""}">${c.render(d)}</td>`).join("")}
-            <td data-label="Status">${publishedPill(d.isPublished)}</td>
+            <td data-label="Status">${statusPill(d.isPublished)}</td>
             <td class="td-actions"><div class="row-actions">
+              ${r.fixed ? `<span class="switch" title="${d.isPublished ? "Disable" : "Enable"} on website"><input type="checkbox" data-toggle="${d._id}" aria-label="Show ${esc(d[r.primary])} on website" ${d.isPublished ? "checked" : ""} /><span class="switch-track"></span></span>` : ""}
               <button class="icon-btn" data-edit="${d._id}" title="Edit">${icon("edit", 16)}</button>
-              <button class="icon-btn icon-btn-danger" data-del="${d._id}" title="Delete">${icon("trash", 16)}</button>
+              ${r.fixed ? "" : `<button class="icon-btn icon-btn-danger" data-del="${d._id}" title="Delete">${icon("trash", 16)}</button>`}
             </div></td>
           </tr>`
           )
@@ -636,7 +640,22 @@
         }
       }
     };
-    $("#add-btn").addEventListener("click", () =>
+    content.onchange = async (e) => {
+      const id = e.target.dataset?.toggle;
+      if (!id) return;
+      const on = e.target.checked;
+      e.target.disabled = true;
+      try {
+        await api(`/admin/${key}/${id}`, { method: "PUT", body: { isPublished: on } });
+        toast(`“${truncate(data.find((d) => d._id === id)[r.primary], 40)}” ${on ? "enabled, now shown on the website" : "disabled, hidden from the website"}`);
+        load();
+      } catch (ex) {
+        e.target.checked = !on;
+        e.target.disabled = false;
+        toast(ex.message, "err");
+      }
+    };
+    $("#add-btn")?.addEventListener("click", () =>
       openForm(`Add ${r.singular}`, "Fill in the details below", r.fields, {}, async (body) => {
         await api(`/admin/${key}`, { method: "POST", body });
         toast(`${r.singular[0].toUpperCase() + r.singular.slice(1)} created`);

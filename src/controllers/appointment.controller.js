@@ -2,6 +2,7 @@ const Appointment = require("../models/Appointment");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 const escapeRegex = require("../utils/escapeRegex");
+const { notifyNewAppointment } = require("../utils/mailer");
 
 // Public: submitted from the website appointment form (accepts the form's `date` field as preferredDate)
 exports.create = asyncHandler(async (req, res) => {
@@ -14,6 +15,7 @@ exports.create = asyncHandler(async (req, res) => {
     preferredDate: preferredDate || date || undefined,
     message,
   });
+  notifyNewAppointment(appointment); // not awaited: the patient shouldn't wait on SMTP
   res.status(201).json({ success: true, message: "Appointment request received", data: { id: appointment._id } });
 });
 

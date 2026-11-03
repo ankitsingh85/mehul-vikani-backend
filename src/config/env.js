@@ -16,6 +16,15 @@ module.exports = {
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "1d",
   corsOrigins: (process.env.CORS_ORIGINS || "").split(",").map((s) => s.trim()).filter(Boolean),
+  // Email notifications for new appointment / contact-form requests (disabled until SMTP_PASS is set)
+  smtp: {
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT) || 465,
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+    fromName: process.env.MAIL_FROM_NAME || "Website",
+    to: process.env.MAIL_TO || process.env.SMTP_USER,
+  },
   superAdmin: {
     name: process.env.SUPERADMIN_NAME || "Super Admin",
     email: process.env.SUPERADMIN_EMAIL,

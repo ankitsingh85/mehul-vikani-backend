@@ -20,9 +20,13 @@ router.get("/dashboard", dashboard.summary);
 router.post("/uploads", singleImage("file"), uploads.image);
 
 // Website content: all roles (superadmin, admin, editor)
+// Treatments are a fixed list: they can be edited and enabled/disabled, but not added or deleted
+const FIXED = new Set(["treatments"]);
+const notAllowed = (req, res) => res.status(405).json({ success: false, message: "Treatments cannot be added or deleted. Disable a treatment to hide it from the website." });
 for (const [name, ctrl] of Object.entries(content)) {
-  router.route(`/${name}`).get(ctrl.adminList).post(ctrl.create);
-  router.route(`/${name}/:id`).get(ctrl.adminGet).put(ctrl.update).delete(ctrl.remove);
+  const fixed = FIXED.has(name);
+  router.route(`/${name}`).get(ctrl.adminList).post(fixed ? notAllowed : ctrl.create);
+  router.route(`/${name}/:id`).get(ctrl.adminGet).put(ctrl.update).delete(fixed ? notAllowed : ctrl.remove);
 }
 
 // Leads & site settings: superadmin + admin
