@@ -259,7 +259,7 @@
       case "steps":
         return `<textarea ${name} rows="5" placeholder="Step title | Step description (one per line)">${esc((v || []).map((s) => `${s.t} | ${s.d}`).join("\n"))}</textarea>`;
       case "select":
-        return `<div class="select-wrap"><select ${name}>${f.options.map((o) => `<option value="${esc(o)}" ${o === v ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>${icon("chevron", 16)}</div>`;
+        return `<div class="select-wrap"><select ${name}>${f.options.map((o) => { const [val, lab] = Array.isArray(o) ? o : [o, o]; return `<option value="${esc(val)}" ${val === v ? "selected" : ""}>${esc(lab)}</option>`; }).join("")}</select>${icon("chevron", 16)}</div>`;
       case "toggle":
         return `<span class="switch"><input type="checkbox" ${name} ${v ? "checked" : ""} /><span class="switch-track"></span></span>`;
       case "date":
@@ -518,6 +518,7 @@
       secondary: (d) => truncate(d.short, 70),
       filter: { key: "category", label: "All categories", options: ["Surgical", "Non-Surgical"] },
       columns: [
+        { label: "Page", render: (d) => (d.pageType === "care" ? pill("Care page", "pill-amber") : pill("Procedure", "pill-gray")) },
         { label: "Category", render: (d) => pill(d.category || "Surgical", d.category === "Non-Surgical" ? "pill-blue" : "pill-violet") },
         { label: "Duration", render: (d) => esc(d.duration || "—") },
         { label: "Hospital stay", render: (d) => esc(d.stay || "—") },
@@ -525,22 +526,40 @@
       fields: [
         { section: "Basics" },
         { name: "title", label: "Title", required: true, full: true },
-        { name: "slug", label: "URL slug", hint: "Leave blank to generate from the title" },
+        { name: "menuLabel", label: "Short name for menus", hint: "Optional, used in the header menu, footer and lists" },
+        { name: "slug", label: "URL slug", hint: "Changing it changes the page address" },
+        {
+          name: "pageType",
+          label: "Page type",
+          type: "select",
+          options: [["procedure", "Procedure page (/treatments/…)"], ["care", "Obesity care page (/obesity-treatment-options/…)"]],
+          default: "procedure",
+          hint: "Care pages (diet, medication) use the simpler layout",
+        },
         { name: "tag", label: "Badge", placeholder: "e.g. Most Popular" },
-        { name: "category", label: "Category", type: "select", options: ["Surgical", "Non-Surgical"] },
+        { name: "category", label: "Category", type: "select", options: ["Surgical", "Non-Surgical"], hint: "Non-surgical items are listed before the Weight Loss Surgery menu" },
         { name: "order", label: "Display order", type: "number", default: 0 },
         { name: "image", label: "Cover image", type: "image" },
-        { name: "short", label: "Short description", type: "textarea", rows: 2 },
+        { name: "short", label: "Short description", type: "textarea", rows: 2, hint: "Shown on treatment cards" },
+        { section: "Page banner" },
+        { name: "heroTitle", label: "Banner heading", placeholder: "A proven surgical path to" },
+        { name: "heroHighlight", label: "Highlighted words (green)", placeholder: "lasting change." },
+        { name: "heroDesc", label: "Banner text", type: "textarea", rows: 2, hint: "Leave blank to use the short description" },
         { section: "Key facts" },
         { name: "duration", label: "Surgery duration", placeholder: "60–90 mins" },
         { name: "stay", label: "Hospital stay", placeholder: "2–3 days" },
         { name: "loss", label: "Expected weight loss", full: true, placeholder: "60–70% excess weight" },
         { section: "Details" },
-        { name: "overview", label: "Overview", type: "textarea", rows: 5 },
-        { name: "docxContent", label: "Detailed content (one paragraph per line)", type: "lines", rows: 6 },
-        { name: "benefits", label: "Benefits", type: "lines" },
+        { name: "heading", label: "Section heading", full: true, hint: "Heading above the content. Leave blank to use the title" },
+        { name: "overview", label: "Overview / introduction", type: "textarea", rows: 5 },
+        { name: "docxContent", label: "Detailed content (one paragraph per line)", type: "lines", rows: 6, hint: "Care pages: shown after the numbered list" },
+        { name: "listHeading", label: "List heading (care pages)", full: true, placeholder: "An individualised plan may include:" },
+        { name: "benefits", label: "Benefits / numbered list (one per line)", type: "lines" },
         { name: "candidates", label: "Ideal candidates", type: "lines" },
         { name: "steps", label: "Treatment steps", type: "steps" },
+        { section: "Side note (under the photo)" },
+        { name: "noteTitle", label: "Note title", placeholder: "Medical information" },
+        { name: "noteText", label: "Note text", type: "textarea", rows: 2 },
         { section: "Visibility" },
         { name: "isPublished", label: "Enabled", hint: "Show this treatment on the website", type: "toggle", default: true },
       ],

@@ -16,6 +16,16 @@ const treatmentSchema = new mongoose.Schema(
     benefits: [String],
     candidates: [String],
     steps: [{ _id: false, t: String, d: String }],
+    // "procedure" pages live at /treatments/:slug; "care" pages (diet, medication) at /obesity-treatment-options/:slug
+    pageType: { type: String, enum: ["procedure", "care"], default: "procedure" },
+    menuLabel: { type: String, trim: true }, // shorter name for menus and lists (falls back to title)
+    heroTitle: { type: String, trim: true },
+    heroHighlight: { type: String, trim: true },
+    heroDesc: { type: String, trim: true },
+    heading: { type: String, trim: true }, // detail section heading (falls back to title)
+    listHeading: { type: String, trim: true }, // care pages: heading above the benefits list
+    noteTitle: { type: String, trim: true },
+    noteText: { type: String, trim: true },
     order: { type: Number, default: 0 },
     isPublished: { type: Boolean, default: true },
   },
