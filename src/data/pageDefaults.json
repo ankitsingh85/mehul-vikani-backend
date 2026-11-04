@@ -3,25 +3,39 @@
     "hero": {
       "slides": [
         {
-          "img": "https://images.pexels.com/photos/33907383/pexels-photo-33907383.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1600&h=1000",
+          "img": "/images/hospital-img.webp",
           "eyebrow": "Advanced Bariatric Surgery",
           "title": "Lose the weight.",
           "highlight": "Gain your life.",
           "desc": "Safe, keyhole weight-loss & metabolic surgery by Dr. Mehul Vikani — trusted by 5,000+ patients for life-changing results."
         },
         {
-          "img": "https://images.pexels.com/photos/35914124/pexels-photo-35914124.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1600&h=1000",
+          "img": "/images/hospital-img1.webp",
           "eyebrow": "Metabolic & Diabetes Surgery",
           "title": "Freedom from",
           "highlight": "Type-2 Diabetes.",
           "desc": "Evidence-based metabolic procedures that help up to 80% of patients reduce or stop insulin and diabetes medicines."
         },
         {
-          "img": "https://images.pexels.com/photos/6669028/pexels-photo-6669028.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1400&h=900",
+          "img": "/images/hospital-img2.webp",
           "eyebrow": "Holistic Lifelong Care",
           "title": "A healthier you,",
           "highlight": "every step.",
           "desc": "From your first consult to lifelong follow-up — nutrition, fitness and emotional support under one roof."
+        },
+        {
+          "img": "/images/hospital-img3.webp",
+          "eyebrow": "Expert Surgical Care",
+          "title": "Care that puts",
+          "highlight": "you first.",
+          "desc": "Personalised bariatric care, advanced surgical expertise and lifelong support from consultation to recovery."
+        },
+        {
+          "img": "/images/hospital-img4.webp",
+          "eyebrow": "Complete Weight-Loss Care",
+          "title": "Your journey to",
+          "highlight": "better health.",
+          "desc": "Thoughtful treatment planning and dedicated support to help you achieve lasting health outcomes."
         }
       ],
       "primaryButton": "Book Consultation",
@@ -43,7 +57,7 @@
       "rating": "4.9/5",
       "ratingText": "from 1,200+ Google reviews",
       "resultLabel": "Average Result",
-      "resultValue": "-35 kg",
+      "resultValue": "-70 to 80% EBWL",
       "resultNote": "in 12 months",
       "metrics": [
         {
@@ -76,7 +90,7 @@
     },
     "about": {
       "show": true,
-      "image": "https://images.pexels.com/photos/17686797/pexels-photo-17686797.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200",
+      "image": "/images/doctor.jpeg",
       "image2": "https://images.pexels.com/photos/39299840/pexels-photo-39299840.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200",
       "years": 15,
       "yearsLabel": "Years of surgical excellence",
@@ -228,7 +242,7 @@
       "eyebrow": "Quick BMI Check",
       "title": "Are you a candidate for",
       "highlight": "weight-loss surgery?",
-      "desc": "Move the sliders to instantly calculate your Body Mass Index using Asian-Indian guidelines.",
+      "desc": "Move the sliders to instantly calculate your Body Mass Index using standard BMI categories.",
       "button": "Explore Treatment Options"
     },
     "testimonials": {
@@ -272,7 +286,7 @@
       "image": "https://images.pexels.com/photos/11759659/pexels-photo-11759659.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200"
     },
     "doctor": {
-      "image": "https://images.pexels.com/photos/17686797/pexels-photo-17686797.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200",
+      "image": "/images/doctor.jpeg",
       "eyebrow": "Dr. Mehul Vikani",
       "title": "MS, FIAGES, FMAS, FALS, FMBS",
       "subtitle": "Consultant Bariatric & Metabolic Surgeon",
