@@ -16,7 +16,8 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-        "img-src": ["'self'", "data:", "blob:", "https:"],
+        // + the website itself, whose own images ("/images/...") are previewed in the page editors
+        "img-src": ["'self'", "data:", "blob:", "https:", ...(env.siteUrl ? [new URL(env.siteUrl).origin] : [])],
         // Video embeds in the blog editor preview
         "frame-src": ["https://www.youtube.com", "https://www.youtube-nocookie.com", "https://player.vimeo.com"],
       },

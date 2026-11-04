@@ -53,6 +53,7 @@ admin/                    admin panel (login.html, index.html, assets/)
 | GET  | `/api/testimonials` | Published testimonials |
 | GET  | `/api/faqs` | Published FAQs (`?cat=Surgery`) |
 | GET  | `/api/settings` | Contact details + homepage stats |
+| GET  | `/api/pages/{home,about,achievements,results,contact}` | Page text and images (saved sections merged over `src/data/pageDefaults.json`) |
 | POST | `/api/appointments` | Appointment form: `{ name, phone, email?, treatment?, date?, message? }` |
 | POST | `/api/subscribers` | Newsletter signup: `{ email }` |
 
@@ -71,8 +72,9 @@ List endpoints support `?q=` search and `?page=&limit=` pagination.
 |---|---|---|
 | `/api/admin/dashboard` | GET | all |
 | `/api/admin/uploads` | POST (multipart, field `file`: JPG/PNG/WebP/GIF, max 5 MB) → `{ url: "/uploads/..." }` | all |
-| `/api/admin/{treatments,blogs,testimonials,faqs}` | GET, POST | all |
-| `/api/admin/{treatments,blogs,testimonials,faqs}/:id` | GET, PUT, DELETE | all |
+| `/api/admin/pages/:key` (`home`, `about`, `achievements`, `results`, `contact`) | GET, PUT `{ section, data }` saves one section | all |
+| `/api/admin/{treatments,blogs,testimonials,faqs}` | GET, POST (treatments: no POST) | all |
+| `/api/admin/{treatments,blogs,testimonials,faqs}/:id` | GET, PUT, DELETE (treatments: no DELETE) | all |
 | `/api/admin/appointments` (`?status=&q=`) | GET | superadmin, admin |
 | `/api/admin/appointments/:id` | GET, PUT (`status`, `notes`), DELETE | superadmin, admin |
 | `/api/admin/subscribers`, `/:id` | GET, DELETE | superadmin, admin |
@@ -90,4 +92,4 @@ Blog posts have a `content` field holding HTML from the admin's Quill editor. It
 The frontend (`../mehul-vikani`) loads content from this API and posts the appointment and newsletter forms to it.
 
 - **Development:** run this backend on port 5000 and `npm run dev` in the frontend. Vite proxies `/api` here, so no CORS setup is needed.
-- **Production:** build the frontend with `VITE_API_URL=https://<your-backend>/api`, and add the site's origin to `CORS_ORIGINS` here.
+- **Production:** build the frontend with `VITE_API_URL=https://<your-backend>/api`, and add the site's origin to `CORS_ORIGINS` and set `SITE_URL` to the site address (used by the admin's "View website" link and image previews).

@@ -38,6 +38,13 @@
     trend: '<path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/>',
     shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
     sparkle: '<path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/>',
+    home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+    file: '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M10 9H8M16 13H8M16 17H8"/>',
+    up: '<path d="m18 15-6-6-6 6"/>',
+    down: '<path d="m6 9 6 6 6-6"/>',
+    layers: '<path d="m12.83 2.18 8.58 3.91a1 1 0 0 1 0 1.83l-8.58 3.9a2 2 0 0 1-1.66 0L2.6 7.91a1 1 0 0 1 0-1.83l8.58-3.9a2 2 0 0 1 1.66 0Z"/><path d="m22 12-9.17 4.18a2 2 0 0 1-1.66 0L2 12M22 17l-9.17 4.18a2 2 0 0 1-1.66 0L2 17"/>',
+    list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+    award: '<circle cx="12" cy="8" r="6"/><path d="M15.48 12.89 17 22l-5-3-5 3 1.52-9.11"/>',
   };
   const icon = (name, size = 18, cls = "") =>
     `<svg class="ico ${cls}" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON_PATHS[name] || ""}</svg>`;
@@ -169,7 +176,10 @@
   document.addEventListener("keydown", (e) => e.key === "Escape" && !$("#drawer").hidden && $("#dialog").hidden && drawer.dismiss());
 
   /* ================= form builder ================= */
-  const imagePreview = (url) => (url ? `<img src="${esc(url)}" alt="" />` : `${icon("image", 26)}<span>Drop image or click</span>`);
+  // Uploads live on this server; other site paths ("/images/...") are files of the website itself
+  let siteUrl = "";
+  const mediaUrl = (url) => (url && url.startsWith("/") && !url.startsWith("/uploads/") ? siteUrl + url : url);
+  const imagePreview = (url) => (url ? `<img src="${esc(mediaUrl(url))}" alt="" />` : `${icon("image", 26)}<span>Drop image or click</span>`);
 
   // Rich text editor (Quill — the editor behind React Quill)
   const RTE_TOOLBAR = [
@@ -269,9 +279,42 @@
         </div>`;
       case "richtext":
         return `<div class="rte"><div class="rte-editor" data-rte="${f.name}"></div></div>`;
+      case "list":
+        return `<div class="list-field" data-list="${f.name}">
+          <div class="list-items">${(v || []).map((item, i) => listItemHtml(f, item, i + 1)).join("")}</div>
+          <button type="button" class="btn btn-soft btn-sm list-add" data-list-add="${f.name}">${icon("plus", 15)} Add ${esc(f.itemLabel.toLowerCase())}</button>
+        </div>`;
       default:
         return `<input type="${f.type || "text"}" ${name} value="${esc(v)}" ${ph} />`;
     }
+  };
+
+  const fieldHtml = (f, value) => {
+    const wide = f.full || ["textarea", "lines", "steps", "image", "richtext", "list"].includes(f.type);
+    // Fields holding buttons/editors can't live inside <label> (clicks would be forwarded to the first button)
+    const tag = ["image", "richtext", "list"].includes(f.type) ? "div" : "label";
+    if (f.type === "toggle") {
+      return `<label class="toggle-row full"><div><div class="field-label">${esc(f.label)}</div>${f.hint ? `<div class="muted small">${esc(f.hint)}</div>` : ""}</div>${toInput(f, value)}</label>`;
+    }
+    return `<${tag} class="field ${wide ? "full" : ""}"><span class="field-label">${esc(f.label)}${f.required ? ' <i class="req">*</i>' : ""}</span>${toInput(f, value)}${f.hint ? `<small class="muted">${esc(f.hint)}</small>` : ""}</${tag}>`;
+  };
+
+  // "list" fields: repeatable groups of sub-fields ({ type: "list", itemLabel, of: [fields] }).
+  // Sub-field inputs get a unique name (`<list>__<n>__<sub>`) so image uploads can target them.
+  let listUid = 0;
+  const listItemHtml = (f, item = {}, n) => {
+    const uid = `${f.name}__${++listUid}`;
+    return `<div class="list-item" data-list-item>
+      <div class="list-item-head">
+        <span class="list-item-title">${esc(f.itemLabel)} <span data-item-no>${n}</span></span>
+        <div class="list-item-actions">
+          <button type="button" class="icon-btn icon-btn-sm" data-item-move="-1" title="Move up">${icon("up", 15)}</button>
+          <button type="button" class="icon-btn icon-btn-sm" data-item-move="1" title="Move down">${icon("down", 15)}</button>
+          <button type="button" class="icon-btn icon-btn-sm icon-btn-danger" data-item-remove title="Remove">${icon("trash", 15)}</button>
+        </div>
+      </div>
+      <div class="form-grid">${f.of.map((sub) => fieldHtml({ ...sub, name: `${uid}__${sub.name}` }, item[sub.name] ?? sub.default)).join("")}</div>
+    </div>`;
   };
 
   const formHtml = (fields, doc = {}) => {
@@ -288,21 +331,29 @@
         continue;
       }
       if (!open) openSection();
-      const wide = f.full || ["textarea", "lines", "steps", "image", "richtext"].includes(f.type);
-      const value = f.initial ? f.initial(doc) : doc[f.name] ?? f.default;
-      // Fields holding buttons/editors can't live inside <label> (clicks would be forwarded to the first button)
-      const tag = ["image", "richtext"].includes(f.type) ? "div" : "label";
-      if (f.type === "toggle") {
-        html += `<label class="toggle-row full"><div><div class="field-label">${esc(f.label)}</div>${f.hint ? `<div class="muted small">${esc(f.hint)}</div>` : ""}</div>${toInput(f, value)}</label>`;
-      } else {
-        html += `<${tag} class="field ${wide ? "full" : ""}"><span class="field-label">${esc(f.label)}${f.required ? ' <i class="req">*</i>' : ""}</span>${toInput(f, value)}${f.hint ? `<small class="muted">${esc(f.hint)}</small>` : ""}</${tag}>`;
-      }
+      html += fieldHtml(f, f.initial ? f.initial(doc) : doc[f.name] ?? f.default);
     }
     html += `</div></div>
       <div class="notice notice-err" id="form-error" hidden></div>
       <div class="drawer-foot"><button type="button" class="btn btn-ghost" data-close>Cancel</button><button type="submit" class="btn btn-primary">${icon("check", 16)} Save changes</button></div>
     </form>`;
     return html;
+  };
+
+  const readValue = (f, el) => {
+    if (f.type === "toggle") return el.checked;
+    if (f.type === "number") return el.value === "" ? undefined : Number(el.value);
+    if (f.type === "lines") return el.value.split("\n").map((s) => s.trim()).filter(Boolean);
+    if (f.type === "steps")
+      return el.value
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean)
+        .map((l) => {
+          const [t, ...d] = l.split("|");
+          return { t: t.trim(), d: d.join("|").trim() };
+        });
+    return el.value.trim();
   };
 
   const readForm = (form, fields, editors = {}) => {
@@ -313,29 +364,24 @@
         if (editors[f.name]) out[f.name] = editorHtml(editors[f.name]);
         continue;
       }
+      if (f.type === "list") {
+        const items = form.querySelectorAll(`[data-list="${f.name}"] > .list-items > [data-list-item]`);
+        out[f.name] = [...items]
+          .map((item) => Object.fromEntries(f.of.map((sub) => [sub.name, readValue(sub, item.querySelector(`[name$="__${sub.name}"]`))])))
+          .filter((o) => Object.values(o).some((v) => v !== "" && v !== undefined)); // drop blank items
+        continue;
+      }
       const el = form.elements[f.name];
       if (!el) continue;
-      if (f.type === "toggle") out[f.name] = el.checked;
-      else if (f.type === "number") out[f.name] = el.value === "" ? undefined : Number(el.value);
-      else if (f.type === "lines") out[f.name] = el.value.split("\n").map((s) => s.trim()).filter(Boolean);
-      else if (f.type === "steps")
-        out[f.name] = el.value
-          .split("\n")
-          .map((l) => l.trim())
-          .filter(Boolean)
-          .map((l) => {
-            const [t, ...d] = l.split("|");
-            return { t: t.trim(), d: d.join("|").trim() };
-          });
-      else if (f.type === "password" && !el.value) continue;
-      else out[f.name] = el.value.trim();
+      if (f.type === "password" && !el.value) continue;
+      out[f.name] = readValue(f, el);
     }
     return out;
   };
 
   const openForm = (title, sub, fields, doc, onSave) => {
-    const hasEditor = fields.some((f) => f.type === "richtext");
-    drawer.open(title, sub, formHtml(fields, doc), { wide: hasEditor });
+    const wide = fields.some((f) => ["richtext", "list"].includes(f.type));
+    drawer.open(title, sub, formHtml(fields, doc), { wide });
     const form = $("#entity-form");
 
     const editors = {};
@@ -370,12 +416,36 @@
       const prev = form.querySelector(`[data-preview="${e.target.name}"]`);
       if (prev) prev.innerHTML = imagePreview(e.target.value.trim());
     });
+    const renumber = (items) => items.querySelectorAll(":scope > [data-list-item]").forEach((el, i) => (el.querySelector("[data-item-no]").textContent = i + 1));
     form.addEventListener("click", (e) => {
       const removeKey = e.target.closest("[data-remove-image]")?.dataset.removeImage;
       if (removeKey) return setImage(removeKey, "");
       const name = e.target.closest("[data-upload], [data-drop]")?.dataset;
       const key = name?.upload || name?.drop;
-      if (key) form.querySelector(`[data-file-for="${key}"]`).click();
+      if (key) return form.querySelector(`[data-file-for="${key}"]`).click();
+
+      // list fields: add / remove / reorder items
+      const addKey = e.target.closest("[data-list-add]")?.dataset.listAdd;
+      if (addKey) {
+        const f = fields.find((x) => x.name === addKey);
+        const items = form.querySelector(`[data-list="${addKey}"] > .list-items`);
+        items.insertAdjacentHTML("beforeend", listItemHtml(f, {}, items.children.length + 1));
+        items.lastElementChild.querySelector("input:not([type=hidden]):not([type=file]), textarea")?.focus();
+        drawerDirty = true;
+        return;
+      }
+      const item = e.target.closest("[data-list-item]");
+      if (!item) return;
+      const items = item.parentElement;
+      if (e.target.closest("[data-item-remove]")) item.remove();
+      else {
+        const dir = e.target.closest("[data-item-move]")?.dataset.itemMove;
+        if (dir === "-1" && item.previousElementSibling) item.previousElementSibling.before(item);
+        else if (dir === "1" && item.nextElementSibling) item.nextElementSibling.after(item);
+        else return;
+      }
+      renumber(items);
+      drawerDirty = true;
     });
     form.addEventListener("change", (e) => {
       const key = e.target.dataset.fileFor;
@@ -384,17 +454,20 @@
         e.target.value = "";
       }
     });
-    form.querySelectorAll("[data-drop]").forEach((zone) => {
-      zone.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        zone.classList.add("is-over");
-      });
-      zone.addEventListener("dragleave", () => zone.classList.remove("is-over"));
-      zone.addEventListener("drop", (e) => {
-        e.preventDefault();
-        zone.classList.remove("is-over");
-        uploadInto(zone.dataset.drop, e.dataTransfer.files[0]);
-      });
+    // delegated, so image fields in list items added later accept drops too
+    form.addEventListener("dragover", (e) => {
+      const zone = e.target.closest("[data-drop]");
+      if (!zone) return;
+      e.preventDefault();
+      zone.classList.add("is-over");
+    });
+    form.addEventListener("dragleave", (e) => e.target.closest("[data-drop]")?.classList.remove("is-over"));
+    form.addEventListener("drop", (e) => {
+      const zone = e.target.closest("[data-drop]");
+      if (!zone) return;
+      e.preventDefault();
+      zone.classList.remove("is-over");
+      uploadInto(zone.dataset.drop, e.dataTransfer.files[0]);
     });
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -665,6 +738,409 @@
     $("#search").addEventListener("input", debounce(load));
     $("#cat-filter")?.addEventListener("change", load);
     await load();
+  }
+
+  /* ================= page content (Home / About) ================= */
+  // Icons the website can show next to "Why choose us" features and journey steps
+  const SITE_ICONS = ["shield", "microscope", "users", "salad", "heart", "clock", "stethoscope", "sparkles", "activity", "award", "star", "pill", "apple", "dumbbell", "smile", "target", "thumbs-up", "calendar", "phone", "check", "trending-down"];
+  const visibility = (where) => [{ section: "Visibility" }, { name: "show", label: "Show this section", hint: `Turn off to hide it from the ${where}`, type: "toggle", default: true }];
+  const headingFields = (opts = {}) => [
+    { name: "eyebrow", label: "Small heading", placeholder: "e.g. Why Choose Us" },
+    { name: "title", label: "Heading", full: !opts.highlight },
+    ...(opts.highlight ? [{ name: "highlight", label: "Highlighted words (green)", hint: "Shown in green after the heading" }] : []),
+  ];
+  const iconSub = { name: "icon", label: "Icon", type: "select", options: SITE_ICONS };
+  const bannerSection = {
+    key: "hero",
+    label: "Page banner",
+    desc: "Heading, text and background image at the top of the page",
+    icon: "image",
+    fields: [{ name: "image", label: "Background image", type: "image" }, ...headingFields({ highlight: true }), { name: "desc", label: "Description", type: "textarea", rows: 2 }],
+  };
+
+  const PAGES = {
+    home: {
+      label: "Home Page",
+      desc: "Every section of the website's home page. Click Edit on a section to change its text and images.",
+      sections: [
+        {
+          key: "hero",
+          label: "Hero slider",
+          desc: "Full-screen slides at the top of the page, with buttons, rating and result card",
+          icon: "image",
+          headline: (d) => d.slides?.[0] && `${d.slides[0].title} ${d.slides[0].highlight}`,
+          fields: [
+            { section: "Slides" },
+            {
+              name: "slides",
+              label: "Slides",
+              type: "list",
+              itemLabel: "Slide",
+              hint: "Slides rotate automatically every few seconds.",
+              of: [
+                { name: "img", label: "Background image", type: "image" },
+                { name: "eyebrow", label: "Small heading" },
+                { name: "title", label: "Title (white line)" },
+                { name: "highlight", label: "Title (green line)" },
+                { name: "desc", label: "Description", type: "textarea", rows: 2 },
+              ],
+            },
+            { section: "Buttons & rating" },
+            { name: "primaryButton", label: "Main button text", hint: "Opens the appointment form" },
+            { name: "secondaryButton", label: "Second button text", hint: "Goes to the treatments page" },
+            { name: "rating", label: "Rating", placeholder: "4.9/5" },
+            { name: "ratingText", label: "Rating caption", placeholder: "from 1,200+ Google reviews" },
+            { name: "avatars", label: "Patient photos next to the rating", type: "list", itemLabel: "Photo", of: [{ name: "img", label: "Photo", type: "image" }] },
+            { section: "Result card (right side)" },
+            { name: "resultLabel", label: "Card label", placeholder: "Average Result" },
+            { name: "resultValue", label: "Result", placeholder: "-35 kg" },
+            { name: "resultNote", label: "Result note", placeholder: "in 12 months" },
+            { name: "metrics", label: "Progress bars", type: "list", itemLabel: "Bar", of: [{ name: "label", label: "Label" }, { name: "value", label: "Percent (0–100)", type: "number" }] },
+            { name: "badgeTitle", label: "Floating badge title", placeholder: "NABH Accredited" },
+            { name: "badgeText", label: "Floating badge text", placeholder: "Partner Hospitals" },
+          ],
+        },
+        {
+          key: "marquee",
+          label: "Scrolling ribbon",
+          desc: "The green band of treatment names that scrolls under the slider",
+          icon: "list",
+          headline: (d) => (d.items || []).slice(0, 3).join(" · "),
+          fields: [{ name: "items", label: "Ribbon items (one per line)", type: "lines", rows: 8 }, ...visibility("home page")],
+        },
+        {
+          key: "about",
+          label: "Doctor introduction",
+          desc: "Photos, qualifications and biography of Dr. Mehul Vikani",
+          icon: "user",
+          fields: [
+            { section: "Photos & badges" },
+            { name: "image", label: "Main photo", type: "image" },
+            { name: "image2", label: "Second photo", type: "image" },
+            { name: "years", label: "Years of experience", type: "number" },
+            { name: "yearsLabel", label: "Years caption" },
+            { name: "badgeTitle", label: "Badge title" },
+            { name: "badgeText", label: "Badge text" },
+            { section: "Text" },
+            { name: "eyebrow", label: "Small heading" },
+            { name: "title", label: "Qualifications (heading)" },
+            { name: "subtitle", label: "Designation", full: true },
+            { name: "paragraphs", label: "Biography (one paragraph per line)", type: "lines", rows: 9 },
+            { name: "registration", label: "Medical registration no." },
+            { name: "button", label: "Button text" },
+            { name: "signature", label: "Signature text" },
+            ...visibility("home page"),
+          ],
+        },
+        {
+          key: "stats",
+          label: "Statistics counters",
+          desc: "The dark band of animated numbers. The numbers themselves are edited in Site Settings.",
+          icon: "trend",
+          headline: () => "Numbers come from Site Settings → Homepage statistics",
+          fields: visibility("home page"),
+        },
+        {
+          key: "treatments",
+          label: "Treatment cards",
+          desc: "Heading and the six image cards linking to treatment pages",
+          icon: "stethoscope",
+          fields: [
+            { section: "Heading" },
+            ...headingFields(),
+            { name: "button", label: "Button text" },
+            { section: "Cards" },
+            {
+              name: "cards",
+              label: "Cards",
+              type: "list",
+              itemLabel: "Card",
+              of: [
+                { name: "image", label: "Image", type: "image" },
+                { name: "title", label: "Title" },
+                { name: "tag", label: "Badge", placeholder: "Surgical" },
+                { name: "link", label: "Opens page", full: true, placeholder: "/treatments/sleeve-gastrectomy", hint: "Website path, e.g. /treatments/sleeve-gastrectomy" },
+                { name: "short", label: "Short description", type: "textarea", rows: 2 },
+              ],
+            },
+            ...visibility("home page"),
+          ],
+        },
+        {
+          key: "whyUs",
+          label: "Why choose us",
+          desc: "Heading, video and the feature boxes",
+          icon: "shield",
+          fields: [
+            { section: "Heading" },
+            ...headingFields({ highlight: true }),
+            { name: "desc", label: "Description", type: "textarea", rows: 2 },
+            { section: "Video" },
+            { name: "image", label: "Video cover image", type: "image" },
+            { name: "videoUrl", label: "YouTube video link", full: true, hint: "Paste any YouTube link (watch, share or embed)" },
+            { section: "Features" },
+            { name: "items", label: "Feature boxes", type: "list", itemLabel: "Feature", of: [iconSub, { name: "title", label: "Title" }, { name: "desc", label: "Description", type: "textarea", rows: 2 }] },
+            ...visibility("home page"),
+          ],
+        },
+        {
+          key: "journey",
+          label: "Patient journey",
+          desc: "The numbered steps on the dark background",
+          icon: "layers",
+          fields: [
+            { section: "Heading" },
+            ...headingFields(),
+            { name: "desc", label: "Description", type: "textarea", rows: 2 },
+            { name: "image", label: "Background image (faded)", type: "image" },
+            { section: "Steps" },
+            { name: "steps", label: "Steps", type: "list", itemLabel: "Step", of: [iconSub, { name: "title", label: "Title" }, { name: "desc", label: "Description", type: "textarea", rows: 2 }] },
+            ...visibility("home page"),
+          ],
+        },
+        {
+          key: "bmi",
+          label: "BMI calculator",
+          desc: "Text beside the quick BMI calculator",
+          icon: "trend",
+          fields: [...headingFields({ highlight: true }), { name: "desc", label: "Description", type: "textarea", rows: 2 }, { name: "button", label: "Button text" }, ...visibility("home page")],
+        },
+        {
+          key: "testimonials",
+          label: "Patient stories",
+          desc: "Heading of the testimonial slider. The stories are managed under Testimonials.",
+          icon: "quote",
+          fields: [...headingFields(), ...visibility("home page")],
+        },
+        {
+          key: "blog",
+          label: "Latest blog posts",
+          desc: "Heading of the blog preview. The newest 3 published posts are shown automatically.",
+          icon: "book",
+          fields: [...headingFields(), { name: "button", label: "Button text" }, ...visibility("home page")],
+        },
+        {
+          key: "book",
+          label: "Book appointment",
+          desc: "Photo, text and highlights beside the appointment form",
+          icon: "calendar",
+          fields: [
+            { name: "image", label: "Photo", type: "image" },
+            ...headingFields(),
+            { name: "desc", label: "Description", type: "textarea", rows: 2 },
+            { name: "highlights", label: "Highlights on the photo", type: "list", itemLabel: "Highlight", of: [{ name: "value", label: "Value", placeholder: "2 hrs" }, { name: "label", label: "Caption", placeholder: "Callback time" }] },
+            ...visibility("home page"),
+          ],
+        },
+      ],
+    },
+    about: {
+      label: "About Page",
+      desc: "The About the Doctor page. Click Edit on a section to change its text and images.",
+      sections: [
+        {
+          key: "hero",
+          label: "Page banner",
+          desc: "Heading and background image at the top of the page",
+          icon: "image",
+          fields: [{ name: "image", label: "Background image", type: "image" }, ...headingFields({ highlight: true })],
+        },
+        {
+          key: "doctor",
+          label: "Doctor profile",
+          desc: "Photo, qualifications and biography",
+          icon: "user",
+          fields: [
+            { name: "image", label: "Photo", type: "image" },
+            { name: "eyebrow", label: "Name" },
+            { name: "title", label: "Qualifications (heading)" },
+            { name: "subtitle", label: "Designation", full: true },
+            { name: "paragraphs", label: "Biography (one paragraph per line)", type: "lines", rows: 10 },
+            { name: "registration", label: "Medical registration no." },
+          ],
+        },
+      ],
+    },
+    achievements: {
+      label: "Achievements Page",
+      desc: "The Achievements page: banner and award certificates.",
+      sections: [
+        bannerSection,
+        {
+          key: "awards",
+          label: "Awards & certificates",
+          desc: "Heading and the certificate images",
+          icon: "award",
+          fields: [
+            ...headingFields(),
+            { name: "desc", label: "Description", type: "textarea", rows: 2 },
+            { section: "Certificates" },
+            {
+              name: "items",
+              label: "Certificates",
+              type: "list",
+              itemLabel: "Certificate",
+              of: [
+                { name: "image", label: "Certificate image", type: "image" },
+                { name: "caption", label: "Description", full: true, hint: "Describes the image for search engines and screen readers" },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    results: {
+      label: "Results Page",
+      desc: "The Results page. Numbers come from Site Settings and patient stories from Testimonials.",
+      sections: [
+        bannerSection,
+        {
+          key: "points",
+          label: "What we track",
+          desc: "Heading and the four result boxes",
+          icon: "trend",
+          fields: [
+            ...headingFields(),
+            { section: "Boxes" },
+            { name: "items", label: "Result boxes", type: "list", itemLabel: "Box", of: [iconSub, { name: "title", label: "Title" }, { name: "desc", label: "Description", type: "textarea", rows: 2 }] },
+            ...visibility("results page"),
+          ],
+        },
+        {
+          key: "stats",
+          label: "Statistics counters",
+          desc: "The dark band of numbers. The numbers themselves are edited in Site Settings.",
+          icon: "trend",
+          headline: () => "Numbers come from Site Settings → Homepage statistics",
+          fields: visibility("results page"),
+        },
+        {
+          key: "voices",
+          label: "Patient voices",
+          desc: "Heading of the patient quotes. The quotes come from Testimonials.",
+          icon: "quote",
+          fields: [...headingFields(), { name: "count", label: "Number of quotes to show", type: "number", default: 3 }, ...visibility("results page")],
+        },
+      ],
+    },
+    contact: {
+      label: "Contact Page",
+      desc: "Text on the Contact page. Phone, email, address and hours are edited in Site Settings.",
+      sections: [
+        bannerSection,
+        {
+          key: "cards",
+          label: "Contact cards",
+          desc: "Titles of the four cards under the banner (their details come from Site Settings)",
+          icon: "phone",
+          headline: (d) => [d.callTitle, d.emailTitle, d.visitTitle, d.hoursTitle].filter(Boolean).join(" · "),
+          fields: [
+            { name: "callTitle", label: "Phone card title" },
+            { name: "emailTitle", label: "Email card title" },
+            { name: "visitTitle", label: "Address card title" },
+            { name: "hoursTitle", label: "Hours card title" },
+          ],
+        },
+        {
+          key: "form",
+          label: "Message form",
+          desc: "Heading and text above the appointment form",
+          icon: "mail",
+          fields: [...headingFields(), { name: "desc", label: "Description", type: "textarea", rows: 2 }],
+        },
+        {
+          key: "map",
+          label: "Map",
+          desc: "Google map beside the form",
+          icon: "home",
+          headline: (d) => d.query || "Shows the clinic address from Site Settings",
+          fields: [{ name: "query", label: "Map location (optional)", full: true, hint: "Leave blank to use the clinic address from Site Settings, or enter a place name / address" }, ...visibility("contact page")],
+        },
+        {
+          key: "emergency",
+          label: "Emergency box",
+          desc: "Dark box with the emergency line and call button",
+          icon: "alert",
+          headline: (d) => d.desc,
+          fields: [{ name: "desc", label: "Text", type: "textarea", rows: 2, hint: "The heading and phone number come from Site Settings" }, ...visibility("contact page")],
+        },
+      ],
+    },
+  };
+
+  // Every image anywhere in a section (for the preview strip)
+  const sectionImages = (value, key, out = []) => {
+    if (Array.isArray(value)) value.forEach((v) => sectionImages(v, key, out));
+    else if (value && typeof value === "object") Object.entries(value).forEach(([k, v]) => sectionImages(v, k, out));
+    else if (["img", "image", "image2"].includes(key) && value) out.push(value);
+    return out;
+  };
+
+  async function renderPage(pageKey) {
+    const page = PAGES[pageKey];
+    setHead(page.label, page.desc);
+    content.innerHTML = skeleton(4);
+    let { data, updatedAt } = await api(`/admin/pages/${pageKey}`);
+
+    const card = (s, i) => {
+      const d = data[s.key] || {};
+      const hasShow = s.fields.some((f) => f.name === "show");
+      const hidden = hasShow && d.show === false;
+      const imgs = sectionImages(d);
+      const headline = (s.headline ? s.headline(d) : [d.title, d.highlight].filter(Boolean).join(" ")) || "";
+      const counts = s.fields.filter((f) => ["list", "lines"].includes(f.type) && f.name !== "paragraphs").map((f) => `${(d[f.name] || []).length} ${esc(f.label.replace(/\s*\(.*\)$/, "").toLowerCase())}`);
+      return `<div class="card page-section ${hidden ? "is-hidden" : ""}">
+        <div class="page-section-head">
+          <span class="page-section-no">${String(i + 1).padStart(2, "0")}</span>
+          <span class="page-section-icon">${icon(s.icon, 18)}</span>
+          <div class="page-section-text"><h3>${esc(s.label)}</h3><p class="muted small">${esc(s.desc)}</p></div>
+          <div class="page-section-actions">
+            ${hasShow ? `<span class="switch" title="${hidden ? "Show" : "Hide"} on website"><input type="checkbox" data-show="${s.key}" aria-label="Show ${esc(s.label)} on website" ${hidden ? "" : "checked"} /><span class="switch-track"></span></span>` : ""}
+            <button class="btn btn-soft btn-sm" data-edit-section="${s.key}">${icon("edit", 15)} Edit</button>
+          </div>
+        </div>
+        <div class="page-section-body">
+          ${imgs.length ? `<div class="page-section-thumbs">${imgs.slice(0, 6).map((u) => `<img src="${esc(mediaUrl(u))}" alt="" loading="lazy" />`).join("")}${imgs.length > 6 ? `<span class="more">+${imgs.length - 6}</span>` : ""}</div>` : ""}
+          <div class="page-section-summary">
+            ${headline ? `<div class="page-section-headline">${esc(truncate(headline, 110))}</div>` : ""}
+            <div class="page-section-meta">${hidden ? pill("Hidden", "pill-gray") : pill("Shown", "pill-green")}${counts.map((c) => `<span class="chip">${c}</span>`).join("")}</div>
+          </div>
+        </div>
+      </div>`;
+    };
+    const draw = () => {
+      content.innerHTML = `<div class="page-sections">${page.sections.map(card).join("")}</div>
+        <p class="muted small page-updated">${updatedAt ? `Last saved ${esc(timeAgo(updatedAt))}` : "Showing the website's original content. Nothing has been changed yet."}</p>`;
+    };
+    const save = async (s, body) => {
+      ({ data, updatedAt } = await api(`/admin/pages/${pageKey}`, { method: "PUT", body: { section: s.key, data: { ...data[s.key], ...body } } }));
+      draw();
+    };
+    draw();
+
+    content.onclick = (e) => {
+      const key = e.target.closest("[data-edit-section]")?.dataset.editSection;
+      if (!key) return;
+      const s = page.sections.find((x) => x.key === key);
+      openForm(`Edit ${s.label.toLowerCase()}`, page.label, s.fields, data[s.key] || {}, async (body) => {
+        await save(s, body);
+        toast(`${s.label} saved`);
+      });
+    };
+    content.onchange = async (e) => {
+      const key = e.target.dataset?.show;
+      if (!key) return;
+      const s = page.sections.find((x) => x.key === key);
+      e.target.disabled = true;
+      try {
+        await save(s, { show: e.target.checked });
+        toast(`${s.label} ${e.target.checked ? "shown on" : "hidden from"} the website`);
+      } catch (ex) {
+        e.target.checked = !e.target.checked;
+        e.target.disabled = false;
+        toast(ex.message, "err");
+      }
+    };
   }
 
   /* ================= appointments ================= */
@@ -1164,6 +1640,11 @@
   const ROUTES = {
     dashboard: { label: "Dashboard", icon: "dashboard", group: "Overview", render: renderDashboard },
     appointments: { label: "Appointments", icon: "calendar", group: "Patients", render: renderAppointments, roles: ["superadmin", "admin"], badge: true },
+    home: { label: "Home Page", icon: "home", group: "Pages", render: () => renderPage("home") },
+    about: { label: "About Page", icon: "file", group: "Pages", render: () => renderPage("about") },
+    achievements: { label: "Achievements Page", icon: "award", group: "Pages", render: () => renderPage("achievements") },
+    results: { label: "Results Page", icon: "trend", group: "Pages", render: () => renderPage("results") },
+    contact: { label: "Contact Page", icon: "phone", group: "Pages", render: () => renderPage("contact") },
     treatments: { label: "Treatments", icon: "stethoscope", group: "Website content", render: () => renderResource("treatments") },
     blogs: { label: "Blog Posts", icon: "book", group: "Website content", render: () => renderResource("blogs") },
     testimonials: { label: "Testimonials", icon: "quote", group: "Website content", render: () => renderResource("testimonials") },
@@ -1248,13 +1729,14 @@
 
   async function init() {
     try {
-      ({ admin: me } = await api("/auth/me"));
+      ({ admin: me, siteUrl = "" } = await api("/auth/me"));
     } catch {
       return;
     }
     buildNav();
     $("#menu-btn").innerHTML = icon("menu", 20);
     $("#view-site").innerHTML = `${icon("external", 15)}<span>View website</span>`;
+    if (siteUrl) $("#view-site").href = siteUrl;
     $("#user-card").innerHTML = `${avatar(me.name)}<div class="user-meta"><div class="user-name">${esc(me.name)}</div><div class="user-role">${esc(me.role)}</div></div>`;
     $("#logout-btn").innerHTML = `${icon("logout", 18)}<span class="nav-text">Log out</span>`;
     $("#profile-btn").innerHTML = `${avatar(me.name, "avatar-sm")}<span class="profile-name">${esc(me.name)}</span>${icon("chevron", 14)}`;

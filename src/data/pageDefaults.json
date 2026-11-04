@@ -1,0 +1,385 @@
+{
+  "home": {
+    "hero": {
+      "slides": [
+        {
+          "img": "https://images.pexels.com/photos/33907383/pexels-photo-33907383.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1600&h=1000",
+          "eyebrow": "Advanced Bariatric Surgery",
+          "title": "Lose the weight.",
+          "highlight": "Gain your life.",
+          "desc": "Safe, keyhole weight-loss & metabolic surgery by Dr. Mehul Vikani — trusted by 5,000+ patients for life-changing results."
+        },
+        {
+          "img": "https://images.pexels.com/photos/35914124/pexels-photo-35914124.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1600&h=1000",
+          "eyebrow": "Metabolic & Diabetes Surgery",
+          "title": "Freedom from",
+          "highlight": "Type-2 Diabetes.",
+          "desc": "Evidence-based metabolic procedures that help up to 80% of patients reduce or stop insulin and diabetes medicines."
+        },
+        {
+          "img": "https://images.pexels.com/photos/6669028/pexels-photo-6669028.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1400&h=900",
+          "eyebrow": "Holistic Lifelong Care",
+          "title": "A healthier you,",
+          "highlight": "every step.",
+          "desc": "From your first consult to lifelong follow-up — nutrition, fitness and emotional support under one roof."
+        }
+      ],
+      "primaryButton": "Book Consultation",
+      "secondaryButton": "Explore Treatments",
+      "avatars": [
+        {
+          "img": "https://images.pexels.com/photos/7991921/pexels-photo-7991921.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200"
+        },
+        {
+          "img": "https://images.pexels.com/photos/8460125/pexels-photo-8460125.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1400&h=900"
+        },
+        {
+          "img": "https://images.pexels.com/photos/6669024/pexels-photo-6669024.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200"
+        },
+        {
+          "img": "https://images.pexels.com/photos/8460095/pexels-photo-8460095.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1400&h=900"
+        }
+      ],
+      "rating": "4.9/5",
+      "ratingText": "from 1,200+ Google reviews",
+      "resultLabel": "Average Result",
+      "resultValue": "-35 kg",
+      "resultNote": "in 12 months",
+      "metrics": [
+        {
+          "label": "Diabetes remission",
+          "value": 80
+        },
+        {
+          "label": "BP normalised",
+          "value": 72
+        },
+        {
+          "label": "Sleep apnea resolved",
+          "value": 85
+        }
+      ],
+      "badgeTitle": "NABH Accredited",
+      "badgeText": "Partner Hospitals"
+    },
+    "marquee": {
+      "show": true,
+      "items": [
+        "Obesity Treatments",
+        "Diet and Lifestyle",
+        "Weight-Loss Medications & Injections",
+        "Intragastric Balloon",
+        "Sleeve Gastrectomy",
+        "Mini Gastric Bypass",
+        "Roux-en-Y Gastric Bypass"
+      ]
+    },
+    "about": {
+      "show": true,
+      "image": "https://images.pexels.com/photos/17686797/pexels-photo-17686797.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200",
+      "image2": "https://images.pexels.com/photos/39299840/pexels-photo-39299840.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200",
+      "years": 15,
+      "yearsLabel": "Years of surgical excellence",
+      "badgeTitle": "FALS, FMAS, FIAGES",
+      "badgeText": "Bariatric Fellowship",
+      "eyebrow": "Dr. Mehul Vikani",
+      "title": "MS, FIAGES, FMAS, FALS, FMBS",
+      "subtitle": "Consultant Bariatric & Metabolic Surgeon",
+      "paragraphs": [
+        "Dr. Mehul Vikani is a surgeon specialising in bariatric and metabolic surgery and the surgical and non-surgical management of obesity.",
+        "His professional training includes exposure to bariatric surgery at Chang Gung Memorial Hospital, Taiwan, and AZ Sint-Jan Hospital, Belgium. His clinical practice encompasses the assessment and management of obesity through individualised treatment approaches, including dietary and lifestyle interventions, medical weight management, and bariatric and metabolic surgery.",
+        "His surgical practice includes procedures such as sleeve gastrectomy, gastric bypass and revisional bariatric surgery. Treatment options are considered based on each patient's clinical assessment, medical history and individual requirements.",
+        "Dr. Vikani's approach emphasises informed decision-making, appropriate treatment selection, patient safety and long-term follow-up in the management of obesity."
+      ],
+      "registration": "G-43101",
+      "button": "Know More About Doctor",
+      "signature": "Mehul Vikani"
+    },
+    "stats": {
+      "show": true
+    },
+    "treatments": {
+      "show": true,
+      "eyebrow": "Our Treatments",
+      "title": "Personalised solutions for lasting weight loss.",
+      "button": "View All Treatments",
+      "cards": [
+        {
+          "title": "Diet and Lifestyle",
+          "tag": "Non-Surgical",
+          "link": "/obesity-treatment-options/diet-and-lifestyle",
+          "image": "https://images.pexels.com/photos/5622195/pexels-photo-5622195.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1400&h=900",
+          "short": "Personalised nutrition, activity, sleep and sustainable lifestyle support."
+        },
+        {
+          "title": "Weight-Loss Medications",
+          "tag": "Medical Care",
+          "link": "/obesity-treatment-options/weight-loss-medications",
+          "image": "https://images.pexels.com/photos/6669024/pexels-photo-6669024.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200",
+          "short": "Supervised medication and injection treatment options for weight management."
+        },
+        {
+          "title": "Intragastric Balloon",
+          "tag": "Non-Surgical",
+          "link": "/treatments/intragastric-balloon",
+          "image": "https://images.pexels.com/photos/7659869/pexels-photo-7659869.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1400&h=900",
+          "short": "A temporary, non-surgical endoscopic option with no cuts or scars."
+        },
+        {
+          "title": "Sleeve Gastrectomy",
+          "tag": "Surgical",
+          "link": "/treatments/sleeve-gastrectomy",
+          "image": "https://images.pexels.com/photos/8853183/pexels-photo-8853183.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1600&h=1000",
+          "short": "A laparoscopic procedure that creates a smaller stomach for lasting results."
+        },
+        {
+          "title": "Mini Gastric Bypass (OAGB)",
+          "tag": "Surgical",
+          "link": "/treatments/mini-gastric-bypass",
+          "image": "https://images.pexels.com/photos/13697927/pexels-photo-13697927.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1600&h=1000",
+          "short": "A single-connection bypass with strong weight-loss and metabolic effects."
+        },
+        {
+          "title": "Roux-en-Y Gastric Bypass",
+          "tag": "Surgical",
+          "link": "/treatments/gastric-bypass",
+          "image": "https://images.pexels.com/photos/7583367/pexels-photo-7583367.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1600&h=1000",
+          "short": "A gold-standard metabolic procedure for selected patients."
+        }
+      ]
+    },
+    "whyUs": {
+      "show": true,
+      "eyebrow": "Why Choose Us",
+      "title": "Excellence that you can",
+      "highlight": "trust.",
+      "desc": "We combine surgical expertise, cutting-edge technology and heartfelt care to deliver the best possible outcomes — safely.",
+      "image": "https://images.pexels.com/photos/13697927/pexels-photo-13697927.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1600&h=1000",
+      "videoUrl": "https://www.youtube.com/embed/0YVj6b5mT4Q",
+      "items": [
+        {
+          "icon": "shield",
+          "title": "Safety First Protocols",
+          "desc": "International safety checklists, ICU backup and experienced anaesthesia team."
+        },
+        {
+          "icon": "microscope",
+          "title": "Advanced 4K Laparoscopy",
+          "desc": "Latest HD/4K systems and energy devices for precise, bloodless surgery."
+        },
+        {
+          "icon": "users",
+          "title": "Multidisciplinary Team",
+          "desc": "Surgeon, physician, dietician, physiotherapist & psychologist together."
+        },
+        {
+          "icon": "salad",
+          "title": "Personalised Nutrition",
+          "desc": "Stage-wise Indian diet plans crafted by certified bariatric dieticians."
+        },
+        {
+          "icon": "heart",
+          "title": "Lifelong Follow-up",
+          "desc": "Structured reviews, support groups and app-based progress tracking."
+        },
+        {
+          "icon": "clock",
+          "title": "Rapid Recovery (ERAS)",
+          "desc": "Enhanced recovery pathways — walk the same day, home in 48 hours."
+        }
+      ]
+    },
+    "journey": {
+      "show": true,
+      "eyebrow": "Your Journey",
+      "title": "Five steps to a healthier you",
+      "desc": "A seamless, well-guided pathway designed around your comfort, safety and long-term success.",
+      "image": "https://images.pexels.com/photos/33916261/pexels-photo-33916261.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1600&h=1000",
+      "steps": [
+        {
+          "icon": "stethoscope",
+          "title": "Consultation",
+          "desc": "Detailed evaluation, BMI analysis and personalised procedure recommendation."
+        },
+        {
+          "icon": "microscope",
+          "title": "Pre-Surgery Prep",
+          "desc": "Blood tests, endoscopy, dietician counselling and fitness clearance."
+        },
+        {
+          "icon": "sparkles",
+          "title": "Keyhole Surgery",
+          "desc": "Minimally invasive procedure with the highest safety standards."
+        },
+        {
+          "icon": "heart",
+          "title": "Recovery",
+          "desc": "Walk the same day; discharge in 2–3 days with a clear diet plan."
+        },
+        {
+          "icon": "activity",
+          "title": "New Life",
+          "desc": "Lifelong follow-up, support groups and coaching for lasting success."
+        }
+      ]
+    },
+    "bmi": {
+      "show": true,
+      "eyebrow": "Quick BMI Check",
+      "title": "Are you a candidate for",
+      "highlight": "weight-loss surgery?",
+      "desc": "Move the sliders to instantly calculate your Body Mass Index using Asian-Indian guidelines.",
+      "button": "Explore Treatment Options"
+    },
+    "testimonials": {
+      "show": true,
+      "eyebrow": "Patient Stories",
+      "title": "Real people. Real transformations."
+    },
+    "blog": {
+      "show": true,
+      "eyebrow": "Health Insights",
+      "title": "Latest from our blog",
+      "button": "Read All Articles"
+    },
+    "book": {
+      "show": true,
+      "image": "https://images.pexels.com/photos/7579823/pexels-photo-7579823.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1400&h=900",
+      "eyebrow": "Book Appointment",
+      "title": "Take the first step today.",
+      "desc": "Our patient coordinator will guide you through every detail — from eligibility and insurance to scheduling your consultation.",
+      "highlights": [
+        {
+          "value": "2 hrs",
+          "label": "Callback time"
+        },
+        {
+          "value": "Free",
+          "label": "BMI assessment"
+        },
+        {
+          "value": "EMI",
+          "label": "Options available"
+        }
+      ]
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "About the Doctor",
+      "title": "Meet the surgeon behind your",
+      "highlight": "transformation.",
+      "image": "https://images.pexels.com/photos/11759659/pexels-photo-11759659.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200"
+    },
+    "doctor": {
+      "image": "https://images.pexels.com/photos/17686797/pexels-photo-17686797.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200",
+      "eyebrow": "Dr. Mehul Vikani",
+      "title": "MS, FIAGES, FMAS, FALS, FMBS",
+      "subtitle": "Consultant Bariatric & Metabolic Surgeon",
+      "paragraphs": [
+        "Dr. Mehul Vikani is a surgeon specialising in bariatric and metabolic surgery and the surgical and non-surgical management of obesity.",
+        "His professional training includes exposure to bariatric surgery at Chang Gung Memorial Hospital, Taiwan, and AZ Sint-Jan Hospital, Belgium. His clinical practice encompasses the assessment and management of obesity through individualised treatment approaches, including dietary and lifestyle interventions, medical weight management, and bariatric and metabolic surgery.",
+        "His surgical practice includes procedures such as sleeve gastrectomy, gastric bypass and revisional bariatric surgery. Treatment options are considered based on each patient's clinical assessment, medical history and individual requirements.",
+        "Dr. Vikani's approach emphasises informed decision-making, appropriate treatment selection, patient safety and long-term follow-up in the management of obesity."
+      ],
+      "registration": "G-43101"
+    }
+  },
+  "achievements": {
+    "hero": {
+      "eyebrow": "Achievements",
+      "title": "Experience built around",
+      "highlight": "safe outcomes.",
+      "desc": "A focused bariatric and metabolic surgery practice grounded in training, assessment and long-term care.",
+      "image": "https://images.pexels.com/photos/11759659/pexels-photo-11759659.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=900&h=1200"
+    },
+    "awards": {
+      "eyebrow": "Recognition",
+      "title": "Awards and appreciation",
+      "desc": "Recognition for Dr. Mehul Vikani's contribution to bariatric surgery and patient care.",
+      "items": [
+        {
+          "image": "/images/achievement-ossi-certificate.png",
+          "caption": "OSSI Young OSSI of the Year certificate awarded to Dr. Mehul Vikani"
+        },
+        {
+          "image": "/images/achievement-siliconindia-certificate.png",
+          "caption": "Siliconindia Top 10 Prominent Bariatric Surgeons 2025 certificate"
+        }
+      ]
+    }
+  },
+  "results": {
+    "hero": {
+      "eyebrow": "Results",
+      "title": "Progress that supports a",
+      "highlight": "healthier life.",
+      "desc": "Every result is individual and supported by long-term medical and nutritional follow-up.",
+      "image": "https://images.pexels.com/photos/35914124/pexels-photo-35914124.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1600&h=1000"
+    },
+    "points": {
+      "show": true,
+      "eyebrow": "What We Track",
+      "title": "Progress beyond the weighing scale",
+      "items": [
+        {
+          "icon": "trending-down",
+          "title": "Weight management",
+          "desc": "Outcomes vary by procedure, health, adherence and long-term follow-up."
+        },
+        {
+          "icon": "activity",
+          "title": "Metabolic improvement",
+          "desc": "Bariatric and metabolic surgery may improve blood glucose control and obesity-related conditions."
+        },
+        {
+          "icon": "heart",
+          "title": "Health and confidence",
+          "desc": "Structured nutrition, activity and support help patients build sustainable routines."
+        },
+        {
+          "icon": "shield",
+          "title": "Safe, informed decisions",
+          "desc": "Expected benefits, risks and limitations are discussed during individual assessment."
+        }
+      ]
+    },
+    "stats": {
+      "show": true
+    },
+    "voices": {
+      "show": true,
+      "eyebrow": "Patient Voices",
+      "title": "Every journey is personal",
+      "count": 3
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contact",
+      "title": "Start your journey with",
+      "highlight": "our team.",
+      "desc": "Reach out to schedule a consultation or ask us anything about your weight-loss journey.",
+      "image": "https://images.pexels.com/photos/8460095/pexels-photo-8460095.jpeg?auto=compress&cs=tinysrgb&fit=crop&w=1400&h=900"
+    },
+    "cards": {
+      "callTitle": "Call Us",
+      "emailTitle": "Email Us",
+      "visitTitle": "Visit Us",
+      "hoursTitle": "OPD Hours"
+    },
+    "form": {
+      "eyebrow": "Book Appointment",
+      "title": "Send us a message",
+      "desc": "We typically respond within 2 working hours."
+    },
+    "map": {
+      "show": true,
+      "query": ""
+    },
+    "emergency": {
+      "show": true,
+      "desc": "For post-operative emergencies, our team is available round the clock."
+    }
+  }
+}

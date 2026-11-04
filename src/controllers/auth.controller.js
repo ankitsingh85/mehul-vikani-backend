@@ -35,7 +35,8 @@ exports.logout = (req, res) => {
   res.json({ success: true, message: "Logged out" });
 };
 
-exports.me = (req, res) => res.json({ success: true, admin: req.admin });
+// siteUrl lets the admin panel link to the website and preview images stored there ("/images/...")
+exports.me = (req, res) => res.json({ success: true, admin: req.admin, siteUrl: env.siteUrl });
 
 exports.changePassword = asyncHandler(async (req, res) => {
   const { currentPassword, newPassword } = req.body || {};

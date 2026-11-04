@@ -7,6 +7,7 @@ const subscribers = require("../controllers/subscriber.controller");
 const settings = require("../controllers/setting.controller");
 const admins = require("../controllers/admin.controller");
 const uploads = require("../controllers/upload.controller");
+const pages = require("../controllers/page.controller");
 const { singleImage } = require("../middleware/upload");
 
 // Every admin route requires a valid JWT
@@ -28,6 +29,9 @@ for (const [name, ctrl] of Object.entries(content)) {
   router.route(`/${name}`).get(ctrl.adminList).post(fixed ? notAllowed : ctrl.create);
   router.route(`/${name}/:id`).get(ctrl.adminGet).put(ctrl.update).delete(fixed ? notAllowed : ctrl.remove);
 }
+
+// Home / About page content: all roles
+router.route("/pages/:key").get(pages.get).put(pages.updateSection);
 
 // Leads & site settings: superadmin + admin
 router.get("/appointments", managers, appointments.list);

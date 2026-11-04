@@ -16,6 +16,8 @@ module.exports = {
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "1d",
   corsOrigins: (process.env.CORS_ORIGINS || "").split(",").map((s) => s.trim()).filter(Boolean),
+  // Public website address (defaults to the first CORS origin)
+  siteUrl: (process.env.SITE_URL || (process.env.CORS_ORIGINS || "").split(",")[0] || "").trim().replace(/\/$/, ""),
   // Email notifications for new appointment / contact-form requests (disabled until SMTP_PASS is set)
   smtp: {
     host: process.env.SMTP_HOST,
